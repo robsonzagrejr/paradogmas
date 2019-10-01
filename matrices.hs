@@ -29,4 +29,4 @@ showMatrixPossibilities = unlines . map (unwords . map showCell)
     showCell (Possible xs) =
       (++ "]")
       . Data.List.foldl' (\acc x -> acc ++ if x `elem` xs then show x else " ") "["
-      $ [1..3]
+      $ [1..(length xs)]
