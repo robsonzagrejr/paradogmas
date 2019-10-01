@@ -1,0 +1,25 @@
+Ata de reuniao Paradogmas
+
+-- Vamo faze com acesso aritmetico de unico array ao inves de lista de listas
+-- fazer dataype/type disso
+-- fazer soma de linha e soma de coluna 
+	linha primeiro coluna depois
+	iniciar celula com 999, null or smth
+-- fazer 4 arrays com a soma de cada lado (dir/esq up/down)
+-- fazer força bruta e depois checar usando o algoritmo do chico
+-- dentro de uma celula sempre existe uma lista 
+	com os valores ainda possiveis para aquela celula
+-- duas matrizes:
+	- Uma matriz resultado (contem um int)
+	- Uma matriz possibilidade (contem uma lista)
+
+-- otimizações:
+	quando a dica corresponde ao len(), só tem uma sequencia
+	quando a dica eh 1 o primeiro predio é len()
+
+
+Links:
+	Bactracking
+	https://abhinavsarkar.net/posts/fast-sudoku-solver-in-haskell-1/ ++ didático
+	https://wiki.haskell.org/Sudoku ++ fonte oficial
+	https://stackoverflow.com/questions/35750123/backtrack-sudoku-in-haskell ++ stackoverflow
