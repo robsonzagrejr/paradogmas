@@ -1,6 +1,6 @@
 #!/bin/bash
-ghc *.hs
 rm -rf *.hi *.o
+./program.hs
 #if [ ! -z "$2" ]
 #then
     #./$name
