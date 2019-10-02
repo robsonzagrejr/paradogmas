@@ -1,5 +1,6 @@
 module Matrices (Matrix,
                 setMatrix,
+                fixedCell,
                 showMatrix,
                 showMatrixPossibilities) where
 import Data.Maybe
@@ -10,11 +11,24 @@ data Cell = Fixed Int | Possible [Int] deriving (Show, Eq)
 type Row  = [Cell]
 type Matrix = [Row]
 
+-- ======Set=====
 setMatrix :: Int -> Int -> Matrix
 setMatrix 0 _ = []
 setMatrix aux n = row : (setMatrix (aux-1) n)
     where
         row = [(Possible [1..n]) | x <- [1..n]]
+
+
+-- ======Operations=====
+fixedCell :: Matrix -> (Int, Int) -> Int-> Matrix
+fixedCell m (i,j) value = (take i m) ++
+                          [(take j (m!!i)) ++
+                          [(Fixed value)] ++
+                          (drop (j+1) (m!!i))] ++
+                          (drop (i+1) m)
+
+
+-- ======Show=====
 
 showMatrix :: Matrix -> String
 showMatrix = unlines . map (unwords . map showCell)
@@ -25,7 +39,7 @@ showMatrix = unlines . map (unwords . map showCell)
 showMatrixPossibilities :: Matrix -> String
 showMatrixPossibilities = unlines . map (unwords . map showCell)
   where
-    showCell (Fixed x)     = show x ++ "          "
+    showCell (Fixed x)     = show x ++ "    "
     showCell (Possible xs) =
       (++ "]")
       . Data.List.foldl' (\acc x -> acc ++ if x `elem` xs then show x else " ") "["
