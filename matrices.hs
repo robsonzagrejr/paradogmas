@@ -1,6 +1,7 @@
 module Matrices (Matrix,
                 setMatrix,
                 fixedCell,
+                completeLine,
                 showMatrix,
                 showMatrixPossibilities) where
 import Data.Maybe
@@ -27,6 +28,21 @@ fixedCell m (i,j) value = (take i m) ++
                           (drop (j+1) (m!!i))] ++
                           (drop (i+1) m)
 
+completeLine :: Matrix -> (Bool, Bool) -> Int -> Int -> Matrix
+completeLine m _ _ 0 = m
+completeLine m cond index aux = completeLine (fixedCell m (i,j) ((length m) - aux +1) ) cond index (aux-1)
+--completeLine m (False,) index aux = completeLine (fixedCell m (index, ((length m) - aux)) aux) False index (aux-1)
+    where
+        i = case cond of
+            (True, False) -> (length m) - aux
+            (False, True) -> index
+            (True, True) -> aux - 1
+            (False, False) -> index
+        j = case cond of
+            (True, False) -> index
+            (False, True) -> aux - 1
+            (True, True) -> index
+            (False, False) -> (length m)- aux
 
 -- ======Show=====
 

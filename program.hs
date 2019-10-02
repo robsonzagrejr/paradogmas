@@ -19,3 +19,5 @@ main = do
 
     putStrLn(showMatrixPossibilities (fst (pruneWk (myExample 1) 0)))
     putStrLn(showMatrixPossibilities (fst (pruneWk (myExample 2) 0)))
+    putStrLn(showMatrixPossibilities (fst (pruneWk (myExample 3) 0)))
+    putStrLn(showMatrixPossibilities (fst (pruneWk (myExample 4) 0)))
