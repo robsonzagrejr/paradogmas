@@ -35,3 +35,10 @@ main = do
     putStrLn(showMatrixPossibilities (cleanPossibles (fst (pruneWk (myExample 5) 0))))
     print(cleanPossibles (fst (pruneWk (myExample 5) 0)))
     print(apagarLista (apagarLista ((rowExample 1)!!0) [3,4]) [5])
+    print("===========Normal==========")
+    putStrLn(showMatrixPossibilities (cleanPossibles (fst (pruneWk (myExample 5) 0))))
+    print("==========Transposta======")
+    putStrLn(showMatrixPossibilities (transpose (cleanPossibles (fst (pruneWk (myExample 5) 0)))))
+
+    print("==========ALLLL======")
+    putStrLn(showMatrixPossibilities (cleanAll (fst (pruneWk (myExample 5) 0))))

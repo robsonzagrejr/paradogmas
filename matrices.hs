@@ -4,9 +4,11 @@ module Matrices (Matrix,
                 fixedCell,
                 completeLine,
                 cleanPossibles,
+                cleanAll,
                 getFixeds,
                 apagarLista,
                 cleanLine,
+                transpose,
                 showMatrix,
                 showMatrixPossibilities) where
 --import Data.Maybe
@@ -46,9 +48,12 @@ completeLine m cond index aux = completeLine (fixedCell m pos ((length m) - aux 
                 (True  , True)  -> ((aux - 1)         , index           )
                 (False , False) -> (index             , ((length m) - aux))
 
+cleanAll :: Matrix -> Matrix
+cleanAll m = transpose (cleanPossibles (transpose (cleanPossibles m)))
+
 cleanPossibles :: Matrix -> Matrix
 cleanPossibles [] = []
-cleanPossibles (x:xs) =  [cleanLine x (getFixeds x)] ++ (cleanPossibles xs)
+cleanPossibles (x:xs) = [cleanLine x (getFixeds x)] ++ (cleanPossibles xs)
 
 getFixeds :: Row -> [Int]
 getFixeds [] = []
@@ -70,6 +75,11 @@ apagarLista :: Cell -> [Int] -> Cell
 apagarLista (Fixed c) _ = (Fixed c)
 apagarLista (Possible cs) [] = (Possible cs)
 apagarLista (Possible cs) (x:xs) = (apagarLista (Possible (apagar cs x)) xs)
+
+--transpose :: [[a]] -> [[a]]
+--transpose ([]:_) = []
+--transpose x = (map head x) : transpose (map tail x)
+
 
 -- ======Show=====
 
