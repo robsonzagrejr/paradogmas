@@ -21,3 +21,16 @@ main = do
     putStrLn(showMatrixPossibilities (fst (pruneWk (myExample 2) 0)))
     putStrLn(showMatrixPossibilities (fst (pruneWk (myExample 3) 0)))
     putStrLn(showMatrixPossibilities (fst (pruneWk (myExample 4) 0)))
+    putStrLn(showMatrixPossibilities (fst (pruneWk (myExample 5) 0)))
+
+
+    --putStrLn(showMatrixPossibilities (cleanProssibles (fst (pruneWk (myExample 5) 0))))
+    print(rowExample 1)
+    print(getFixeds (rowExample 1))
+    print(cleanLine (rowExample 1) (getFixeds (rowExample 1)))
+
+    print("========Normal========")
+    putStrLn(showMatrixPossibilities (fst (pruneWk (myExample 5) 0)))
+    print("========Clean========")
+    putStrLn(showMatrixPossibilities (cleanPossibles (fst (pruneWk (myExample 5) 0))))
+    print(apagarLista (apagarLista ((rowExample 1)!!0) [3,4]) [5])
