@@ -2,7 +2,7 @@
 -- import Matrices
 
 
--- uses the last biggest number to get increments
+-- uses the last biggest number to get increments of viewCount
 auxCountRow :: [Int] -> Int -> Int
 auxCountRow [] _ = 0
 auxCountRow (head:body) greatest 
@@ -19,36 +19,48 @@ validateRow :: [Int] -> Int -> Bool
 validateRow _ 0 = True
 validateRow wkRow visRowCount = (countRow wkRow) == visRowCount
 
+-- Exclusive function for left view of wk
 validateLeft :: [[Int]] -> [Int] -> Bool
 validateLeft _ [] = True
 validateLeft (current:next) (head:body) 
     = validateRow current head 
         && validateLeft next body 
 
+-- Exclusive function for rigth view of wk
+-- Different from left just because it has to invert wk
 validateRigth :: [[Int]] -> [Int] -> Bool
 validateRigth _ [] = True
 validateRigth (current:next) (head:body) 
-    = validateRow (inverteRow current) head 
+    = validateRow (invertRow current) head 
         && validateRigth next body 
 
-inverteRow :: [Int] -> [Int]
-inverteRow [] = []
-inverteRow (head:body) = inverteRow(body) ++ [head]
+-- Used to invert the view for wk rigth and bottom
+invertRow :: [Int] -> [Int]
+invertRow [] = []
+invertRow (head:body) = invertRow(body) ++ [head]
 
--- myExample 1 = ((setMatrix 3 3), ([[0,2,0],[3,2,0],[2,0,0],[1,0,2]]))
--- vamo trabalha emcima desse modelo
+-- Top has the same logic as Left, just for reading purposes
+validateTop :: [[Int]] -> [Int] -> Bool
+validateTop wk vsRow = validateLeft wk vsRow
 
+-- Bot has the same logic as Rigth, just for reading purposes
+validateBottom :: [[Int]] -> [Int] -> Bool
+validateBottom wk vsRow = validateRigth wk vsRow
+
+-- Validates Left and Rigth
 auxHor :: [[Int]] -> [[Int]] -> Bool
 auxHor wk vis = 
     validateLeft wk (getLeft(vis)) && 
     validateRigth wk (getRigth(vis))
 
+-- Validates Top and Bottom
+-- Receives transposed wk to reuse row functions
 auxVer :: [[Int]] -> [[Int]] -> Bool
 auxVer wk vis = 
-    validateLeft wk (getTop(vis)) && 
-    validateRigth wk (getBottom(vis))
+    validateTop wk (getTop(vis)) && 
+    validateBottom wk (getBottom(vis))
 
--- Matriz, visNESW (North East South West)
+-- Whole process, receives wk and vs
 checkIt :: [[Int]] -> [[Int]] -> Bool
 checkIt wk vis = (auxHor wk vis) && (auxVer (transpose wk) vis) 
 
@@ -117,7 +129,3 @@ main = do
     print (checkIt (exMatriz 1) (exVis 1))
     print (checkIt (exMatriz 2) (exVis 2))
 
--- -- Receives Wk + VisSkyscraper from this axis
--- rowsWk :: [[Int]] -> [Int] -> Bool
--- rowsWk [] = True
--- rowsWk (head:body) = validateRow head && rowsWk body
