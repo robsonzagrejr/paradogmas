@@ -33,4 +33,5 @@ main = do
     putStrLn(showMatrixPossibilities (fst (pruneWk (myExample 5) 0)))
     print("========Clean========")
     putStrLn(showMatrixPossibilities (cleanPossibles (fst (pruneWk (myExample 5) 0))))
+    print(cleanPossibles (fst (pruneWk (myExample 5) 0)))
     print(apagarLista (apagarLista ((rowExample 1)!!0) [3,4]) [5])

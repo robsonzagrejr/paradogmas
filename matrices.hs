@@ -82,8 +82,8 @@ showMatrix = unlines . map (unwords . map showCell)
 showMatrixPossibilities :: Matrix -> String
 showMatrixPossibilities = unlines . map (unwords . map showCell)
   where
-    showCell (Fixed x)     = show x ++ "    "
-    showCell (Possible xs) =
-      (++ "]")
-      . Data.List.foldl' (\acc x -> acc ++ if x `elem` xs then show x else " ") "["
-      $ [1..(length xs)]
+    showCell (Fixed x)     = show x ++ "        "
+    showCell (Possible xs) = show xs
+      --(++ "]")
+      -- . Data.List.foldl' (\acc x -> acc ++ if x `elem` xs then show x else " ") "["
+      -- $ [1..(length xs)]
