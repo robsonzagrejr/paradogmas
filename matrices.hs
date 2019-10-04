@@ -1,14 +1,15 @@
 module Matrices (Matrix,
                 rowExample,
                 setMatrix,
-                fixedCell,
+                fixCell,
                 completeLine,
                 cleanPossibles,
                 cleanAll,
                 getFixeds,
                 apagarLista,
                 cleanLine,
-                transpose,
+                verifyFixed,
+                getCordFirstPossible,
                 showMatrix,
                 showMatrixPossibilities) where
 --import Data.Maybe
@@ -30,8 +31,8 @@ setMatrix aux n = row : (setMatrix (aux-1) n)
         row = [(Possible [1..n]) | x <- [1..n]]
 
 -- ======Operations=====
-fixedCell :: Matrix -> (Int, Int) -> Int-> Matrix
-fixedCell m (i,j) value = (take i m)           ++ --Firsts i rows of matrix
+fixCell :: Matrix -> (Int, Int) -> Int-> Matrix
+fixCell m (i,j) value = (take i m)           ++ --Firsts i rows of matrix
                           [(take j (m!!i))     ++ --Firsts j cells of row
                           [(Fixed value)]      ++ --Put value in cell of row
                           (drop (j+1) (m!!i))] ++ --Lasts (j + 1) cells of row
@@ -39,7 +40,7 @@ fixedCell m (i,j) value = (take i m)           ++ --Firsts i rows of matrix
 
 completeLine :: Matrix -> (Bool, Bool) -> Int -> Int -> Matrix
 completeLine m _ _ 0 = m
-completeLine m cond index aux = completeLine (fixedCell m pos ((length m) - aux +1) ) cond index (aux-1)
+completeLine m cond index aux = completeLine (fixCell m pos ((length m) - aux +1) ) cond index (aux-1)
     where
         pos = case cond of
             ----(Column, Invert)   (Index of Row      , Index of Column )
@@ -76,9 +77,34 @@ apagarLista (Fixed c) _ = (Fixed c)
 apagarLista (Possible cs) [] = (Possible cs)
 apagarLista (Possible cs) (x:xs) = (apagarLista (Possible (apagar cs x)) xs)
 
---transpose :: [[a]] -> [[a]]
---transpose ([]:_) = []
---transpose x = (map head x) : transpose (map tail x)
+
+verifyFixed :: Matrix -> Bool
+verifyFixed [] = True
+verifyFixed (x:xs) | verifyFixedRow x = verifyFixed xs
+                        | otherwise = False
+
+verifyFixedRow :: Row -> Bool
+verifyFixedRow [] = True
+verifyFixedRow (c:cs) | verifyCell c = verifyFixedRow cs
+                      | otherwise = False
+    where
+        verifyCell (Fixed v) = True
+        verifyCell (Possible v) = False
+
+getCordFirstPossible :: Matrix -> Int -> (Int,Int)
+getCordFirstPossible [] _ =(-1,-1)
+getCordFirstPossible (x:xs) i = if (getFirstPossible x 0) /= -1 then
+                        (i,getFirstPossible x 0)
+                   else
+                        (getCordFirstPossible xs (i+1))
+    where
+        getFirstPossible :: Row -> Int -> Int
+        getFirstPossible [] _ = -1
+        getFirstPossible (c:cs) j | isFixed c = j
+                                  | otherwise = getFirstPossible cs (j+1)
+            where
+                isFixed (Fixed _) = False
+                isFixed _ = True
 
 
 -- ======Show=====

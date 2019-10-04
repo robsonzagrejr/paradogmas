@@ -14,8 +14,8 @@ main = do
     let i = 1
     let j = 0
 
-    print(fixedCell (fst (myExample 1)) (i,j) 6)
-    putStrLn(showMatrixPossibilities (fixedCell (fst (myExample 1)) (i,j) 8))
+    print(fixCell (fst (myExample 1)) (i,j) 6)
+    putStrLn(showMatrixPossibilities (fixCell (fst (myExample 1)) (i,j) 8))
 
     putStrLn(showMatrixPossibilities (fst (pruneWk (myExample 1) 0)))
     putStrLn(showMatrixPossibilities (fst (pruneWk (myExample 2) 0)))
@@ -38,7 +38,11 @@ main = do
     print("===========Normal==========")
     putStrLn(showMatrixPossibilities (cleanPossibles (fst (pruneWk (myExample 5) 0))))
     print("==========Transposta======")
-    putStrLn(showMatrixPossibilities (transpose (cleanPossibles (fst (pruneWk (myExample 5) 0)))))
+    --putStrLn(showMatrixPossibilities (transpose (cleanPossibles (fst (pruneWk (myExample 5) 0)))))
 
     print("==========ALLLL======")
     putStrLn(showMatrixPossibilities (cleanAll (fst (pruneWk (myExample 5) 0))))
+    print("==========VerifyFixed======")
+    print(verifyFixed (fst (pruneWk (myExample 6) 0)))
+    print(verifyFixed (fst (pruneWk (myExample 5) 0)))
+    print(getCordFirstPossible (fst (pruneWk (myExample 7) 0)) 0)
