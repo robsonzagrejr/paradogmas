@@ -17,6 +17,8 @@ Ata de reuniao Paradogmas
 	quando a dica corresponde ao len(), só tem uma sequencia
 	quando a dica eh 1 o primeiro predio é len()
 
+Talvez nosso codigo ja aceita m x n, olhar o aux do prune
+
 
 Links:
 	Bactracking

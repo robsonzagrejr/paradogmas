@@ -34,7 +34,7 @@ main = do
     print("========Clean========")
     putStrLn(showMatrixPossibilities (cleanPossibles (fst (pruneWk (myExample 5) 0))))
     print(cleanPossibles (fst (pruneWk (myExample 5) 0)))
-    print(apagarLista (apagarLista ((rowExample 1)!!0) [3,4]) [5])
+    print(removeListInCell (removeListInCell ((rowExample 1)!!0) [3,4]) [5])
     print("===========Normal==========")
     putStrLn(showMatrixPossibilities (cleanPossibles (fst (pruneWk (myExample 5) 0))))
     print("==========Transposta======")
