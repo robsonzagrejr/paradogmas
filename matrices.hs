@@ -13,8 +13,12 @@ module Matrices (Matrix,
                 getFixeds,
                 removeListInCell,
                 cleanLine,
-                verifyFixed,
                 getCordFirstPossible,
+                nextMatrices,
+                solverMatrixFixed,
+                verifyFixed,
+                verifyEmpty,
+                makeIntMatrix,
                 showMatrix,
                 showMatrixPossibilities) where
 
@@ -24,6 +28,8 @@ module Matrices (Matrix,
 
 
 --import Data.Maybe
+import Control.Applicative ((<|>))
+import qualified Control.Monad
 import Data.List
 --import Data.Char
 
@@ -154,10 +160,63 @@ getCordFirstPossible (x:xs) i = if (getFirstPossible x 0) /= -1 then
         getFirstPossible [] _     = -1
         getFirstPossible (c:cs) j | isFixed c = j
                                   | otherwise = getFirstPossible cs (j+1)
-            where
-                -- Return if Cell is Fixed or not
-                isFixed (Fixed _) = False
-                isFixed _         = True
+
+-- Return if Cell is Fixed or not
+isFixed :: Cell -> Bool
+isFixed (Fixed _) = False
+isFixed _         = True
+
+
+--COMECA AQUI CHICO
+nextMatrices :: Matrix -> (Matrix, Matrix)
+nextMatrices m = (fixCell m (i,j) v, putElement m (i,j) b)
+    where
+        (i,j) = getCordFirstPossible m 0
+        v = getElement m (i, j)
+        b = changeList ((m !! i) !! j)
+
+
+getElement :: Matrix -> (Int, Int) -> Int
+getElement m (i,j) = getFirstElement v
+    where
+        v = ((m !! i) !! j)
+        getFirstElement (Possible []) = -666
+        getFirstElement (Possible x) = x!!0
+        getFirstElement (Fixed x) = x
+
+changeList :: Cell -> Cell
+changeList (Possible (x:xs)) = (Possible xs)
+
+putElement :: Matrix -> (Int, Int) -> Cell -> Matrix
+putElement m (i,j) value = (take i m)           ++ --Firsts i rows of matrix
+                        [(take j (m!!i))     ++ --Firsts j cells of row
+                        [value]      ++ --Put value in cell of row
+                        (drop (j+1) (m!!i))] ++ --Lasts (j + 1) cells of row
+                        (drop (i+1) m)          --Lasts (i + 1) rows of matrix
+
+
+--Solver Fudid da Poha
+solverMatrixFixed :: Matrix -> Maybe Matrix
+solverMatrixFixed matrix = solverAux (cleanAll matrix)
+    where
+        solverAux m | verifyFixed m = Just m
+                    | verifyEmpty m = Nothing
+                    | otherwise = let (m1, m2) = nextMatrices m
+                                  in solverMatrixFixed m1 <|> solverMatrixFixed m2
+
+verifyEmpty :: Matrix -> Bool
+verifyEmpty m | getElement m (getCordFirstPossible m 0) == -666 = True
+              | otherwise = False
+
+convertFixed :: Cell -> Int
+convertFixed (Fixed num) = num
+
+makeIntRow :: Row -> [Int]
+makeIntRow row = map convertFixed row
+
+makeIntMatrix :: Matrix -> [[Int]]
+makeIntMatrix mat = map makeIntRow mat
+
 
 
 -- ============

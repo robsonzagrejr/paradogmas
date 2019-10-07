@@ -46,3 +46,11 @@ main = do
     print(verifyFixed (fst (pruneWk (myExample 6) 0)))
     print(verifyFixed (fst (pruneWk (myExample 5) 0)))
     print(getCordFirstPossible (fst (pruneWk (myExample 7) 0)) 0)
+    print("==========Next Matrices======")
+    let aux = nextMatrices ( fst ( pruneWk (myExample 1) 0))
+    putStrLn(showMatrixPossibilities (fst aux))
+    putStrLn(showMatrixPossibilities (snd aux))
+    print("==========Solve Matrix======")
+    case solverWk (myExample 9) of
+        Nothing    -> putStrLn "No solution found"
+        Just matrix' -> putStrLn $ showMatrix matrix'

@@ -5,6 +5,7 @@
 module Wolkenkratzer (Wk,
                       pruneWk,
                       pruneWkVs,
+                      solverWk,
                       myExample) where
 
 -- ======================
@@ -13,7 +14,11 @@ module Wolkenkratzer (Wk,
 
 
 -- Matrices: Used to represent the board of game
+
+import Control.Applicative ((<|>))
 import Matrices
+import Checkup
+
 
 -- === Visual Skyscraper ===
 -- Array of visible skyscrapers in order = top-right-bottom-left
@@ -34,7 +39,8 @@ myExample 4 = ((setMatrix 3 3), ([[0,0,0],[0,3,0],[0,3,0],[0,0,0]]))
 myExample 5 = ((setMatrix 6 6), ([[0,0,0,0,6,0],[0,6,0,0,0,0],[0,6,0,0,0,0],[0,0,0,0,6,0]]))
 myExample 6 = ((setMatrix 3 3), ([[3,3,3],[1,1,1],[1,1,1],[1,1,1]]))
 myExample 7 = ((setMatrix 3 3), ([[1,1,1],[1,1,1],[1,1,1],[1,1,1]]))
-
+myExample 8 = ((setMatrix 3 3), ([[0,0,0],[0,0,0],[0,0,0],[0,0,2]]))
+myExample 9 = ((setMatrix 3 3), ([[0,2,0],[3,2,0],[2,0,0],[1,0,2]]))
 
 -- ===================================
 -- === Operations in Wolkenkratzer ===
@@ -70,4 +76,12 @@ pruneWkVs m (x:xs) index | x == 1 = pruneWkVs (fixCell m pos (length m)) xs inde
                 2 -> (True  , True   )
                 3 -> (False , False  )
 
+--Solver TOp
+solverWk :: Wk -> Maybe Matrix
+solverWk (matrix, vs) = solverAux (cleanAll matrix) vs
+    where
+        solverAux m v | verifyFixed m && (checkIt (makeIntMatrix m) v) = Just m
+                        | verifyEmpty m = Nothing
+                        | otherwise = let (m1, m2) = nextMatrices m
+                                      in solverWk (m1,v) <|> solverWk (m2,v)
 

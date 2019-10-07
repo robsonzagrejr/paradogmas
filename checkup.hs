@@ -1,5 +1,5 @@
--- module CheckSolution (checkIt) where
--- import Matrices
+module Checkup (checkIt) where
+--import Matrices
 
 --test of real fixed matrix
 data Cell = Fixed Int | Possible [Int] deriving (Show, Eq)
@@ -120,6 +120,9 @@ getBottom vis = vis!!2
 getLeft :: [[Int]] -> [Int]
 getLeft vis = vis!!3 
 
+
+--checkResult :: Matrix -> VisualScryscraper -> Bool
+--checkResult m v = checkIt (makeIntMatrix m) (makeIntMatrix vs)
 
 main = do
     print (countRow [1,2,3,4,5])
