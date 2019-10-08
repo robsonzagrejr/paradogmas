@@ -1,6 +1,27 @@
--- module CheckSolution (checkIt) where
--- import Matrices
+module Checkup (checkIt) where
+--import Matrices
 
+--test of real fixed matrix
+data Cell = Fixed Int | Possible [Int] deriving (Show, Eq)
+type Row  = [Cell]
+type Matrix = [Row]
+
+createFixedRow :: Int -> Int -> Int -> Row
+createFixedRow x y z = [Fixed x, Fixed y, Fixed z]
+
+fixedMatrix :: Int -> Matrix
+fixedMatrix 1 = [(createFixedRow 3 2 1),
+                    (createFixedRow 1 3 2),
+                    (createFixedRow 2 1 3)] 
+
+convertFixed :: Cell -> Int
+convertFixed (Fixed num) = num
+
+makeIntRow :: Row -> [Int]
+makeIntRow row = map convertFixed row
+
+makeIntMatrix :: Matrix -> [[Int]]
+makeIntMatrix mat = map makeIntRow mat
 
 -- uses the last biggest number to get increments of viewCount
 auxCountRow :: [Int] -> Int -> Int
@@ -100,6 +121,9 @@ getLeft :: [[Int]] -> [Int]
 getLeft vis = vis!!3 
 
 
+--checkResult :: Matrix -> VisualScryscraper -> Bool
+--checkResult m v = checkIt (makeIntMatrix m) (makeIntMatrix vs)
+
 main = do
     print (countRow [1,2,3,4,5])
     print (countRow [3,2,1,4,5])
@@ -129,3 +153,9 @@ main = do
     print (checkIt (exMatriz 1) (exVis 1))
     print (checkIt (exMatriz 2) (exVis 2))
 
+    print (createFixedRow 3 1 2)
+    print (fixedMatrix 1)
+
+    print (convertFixed (Fixed 2))
+    print (makeIntRow (createFixedRow 3 1 2))
+    print (makeIntMatrix (fixedMatrix 1))
