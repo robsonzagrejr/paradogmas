@@ -1,5 +1,5 @@
 #!/bin/bash
-ghc matrices.hs wolkenkratzer.hs program.hs
+ghc matrices.hs wolkenkratzer.hs checkup.hs program.hs
 rm -rf *.hi *.o
 ./program
 #if [ ! -z "$2" ]
