@@ -221,33 +221,35 @@ verifyEmpty m | (i,j) == (-1, -1) = True
             where
                 (i,j) = (getCordFirstPossible m 0)
 
-convertFixed :: Cell -> Int
-convertFixed (Fixed num) = num
-
-makeIntRow :: Row -> [Int]
-makeIntRow row = map convertFixed row
-
 -- === Make Int Matrix ===
 -- Casts a type Matrix to [[Int]], in order to verify
 makeIntMatrix :: Matrix -> [[Int]]
 makeIntMatrix mat = map makeIntRow mat
 
+makeIntRow :: Row -> [Int]
+makeIntRow row = map convertFixed row
 
+convertFixed :: Cell -> Int
+convertFixed (Fixed num) = num
 
 -- === Clean Extreme===
--- Casts a type Matrix to [[Int]], in order to verify
+-- Clean n elements in a possible cell
+-- this function will clean n elements in a line, and n-1 last elements in next cell
 cleanExtreme :: Matrix -> (Int,Int) -> Int -> (Bool, Bool) -> Matrix
 cleanExtreme m _ 1 _ = m
-cleanExtreme m (i,j) qt cond | isFixed ((m!!i)!!j) = cleanExtreme aux_matrix pos (qt-1) cond
-                             | otherwise = cleanExtreme m pos (qt-1) cond
+cleanExtreme m (i,j) n cond | isFixed ((m!!i)!!j) = cleanExtreme aux_matrix pos (n-1) cond
+                             | otherwise = cleanExtreme m pos (n-1) cond
     where
-        aux_matrix = putElement m (i,j) (removeListInCell ((m!!i)!!j) (getPseudoList (length m) qt))
+        aux_matrix = putElement m (i,j) (removeListInCell ((m!!i)!!j) (getPseudoList (length m) n))
         pos = case cond of
-                (True, False)  -> (i+1, j)
-                (False, True)  -> (i, j-1)
-                (True, True)   -> (i-1, j)
-                (False, False) -> (i, j+1)
+              --(Columns, Inverse)    (Index Row, Index Column)
+                (True   , False  ) -> (i+1      , j           ) --Next cell will be the next row in same column
+                (False  , True   ) -> (i        , j-1         ) --Next cell will be the previous column in same row
+                (True   , True   ) -> (i-1      , j           ) --Next cell will be the previous row in same column
+                (False  , False  ) -> (i        , j+1         ) --Next cell will be the next column in same row 
 
+-- === Get Aux List ===
+-- Return a list of lentgh qt, start from n and descress in next element
 getPseudoList :: Int -> Int -> [Int]
 getPseudoList _ 0 = []
 getPseudoList n qt = [n] ++ getPseudoList (n-1) (qt-1)

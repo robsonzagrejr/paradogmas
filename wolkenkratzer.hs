@@ -66,13 +66,13 @@ pruneWk (m, vs) i = pruneWk ((pruneWkVs m (vs!!i) i), vs) (i+1)
 
 
 -- === Pruning the wolkenkratzer based on VisualScryscraper ===
---  Pass coordenades for matrix be filed with fixed values based on 1 and n
+-- Pass coordenades for matrix be filed with fixed values based on 1 and n
 pruneWkVs :: Matrix -> [Int] -> Int -> Matrix
 pruneWkVs m [] _ = m
-pruneWkVs m (x:xs) index | x == 1 = pruneWkVs (fixCell m pos (length m)) xs index
+pruneWkVs m (x:xs) index | x == 1          = pruneWkVs (fixCell m pos (length m)) xs index
                          | x == (length m) = pruneWkVs (completeLine m cond ((length m) - (length (x:xs))) (length m)) xs index
-                         | x > 1 = pruneWkVs (cleanExtreme m pos (x-1) cond) xs index
-                         | otherwise = pruneWkVs m xs index
+                         | x > 1           = pruneWkVs (cleanExtreme m pos (x-1) cond) xs index
+                         | otherwise       = pruneWkVs m xs index
     where
         -- Position in Matrix (i,j)
         pos = case index of
@@ -89,7 +89,7 @@ pruneWkVs m (x:xs) index | x == 1 = pruneWkVs (fixCell m pos (length m)) xs inde
                 3 -> (False , False  )
 
 -- === Solver Wolkenkratzer ===
--- Solves the puzzle
+-- Solves the puzzle with prune board
 solverWk :: Wk -> Maybe Matrix
 solverWk wk = solverAuxWk (pruneWk wk 0)
 
@@ -101,6 +101,6 @@ solverAuxWk (matrix, vs) = solverAux matrix vs
                                         else
                                           Nothing
                       | verifyEmpty m = Nothing
-                      | otherwise = let (m1, m2) = nextMatrices m
-                                    in solverAuxWk (m1,v) <|> solverAuxWk (m2,v)
+                      | otherwise     = let (m1, m2) = nextMatrices m
+                                        in solverAuxWk (m1,v) <|> solverAuxWk (m2,v)
 
