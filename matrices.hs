@@ -232,11 +232,21 @@ makeIntRow row = map convertFixed row
 makeIntMatrix :: Matrix -> [[Int]]
 makeIntMatrix mat = map makeIntRow mat
 
-cleanExtreme :: Matrix -> (Int,Int) -> Int -> Matrix
-cleanExtreme m (i,j) qt | isFixed ((m!!i)!!j) = putElement m (i,j) (removeListInCell ((m!!i)!!j) (getPseudoList (length m) qt))
-                        | otherwise = m
+
+
+-- === Clean Extreme===
+-- Casts a type Matrix to [[Int]], in order to verify
+cleanExtreme :: Matrix -> (Int,Int) -> Int -> (Bool, Bool) -> Matrix
+cleanExtreme m _ 1 _ = m
+cleanExtreme m (i,j) qt cond | isFixed ((m!!i)!!j) = cleanExtreme aux_matrix pos (qt-1) cond
+                             | otherwise = cleanExtreme m pos (qt-1) cond
     where
-        pickCell (Possible x) = x
+        aux_matrix = putElement m (i,j) (removeListInCell ((m!!i)!!j) (getPseudoList (length m) qt))
+        pos = case cond of
+                (True, False)  -> (i+1, j)
+                (False, True)  -> (i, j-1)
+                (True, True)   -> (i-1, j)
+                (False, False) -> (i, j+1)
 
 getPseudoList :: Int -> Int -> [Int]
 getPseudoList _ 0 = []

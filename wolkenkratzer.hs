@@ -71,7 +71,7 @@ pruneWkVs :: Matrix -> [Int] -> Int -> Matrix
 pruneWkVs m [] _ = m
 pruneWkVs m (x:xs) index | x == 1 = pruneWkVs (fixCell m pos (length m)) xs index
                          | x == (length m) = pruneWkVs (completeLine m cond ((length m) - (length (x:xs))) (length m)) xs index
-                         | x > 1 = pruneWkVs (cleanExtreme m pos (x-1)) xs index
+                         | x > 1 = pruneWkVs (cleanExtreme m pos (x-1) cond) xs index
                          | otherwise = pruneWkVs m xs index
     where
         -- Position in Matrix (i,j)
@@ -88,11 +88,11 @@ pruneWkVs m (x:xs) index | x == 1 = pruneWkVs (fixCell m pos (length m)) xs inde
                 2 -> (True  , True   )
                 3 -> (False , False  )
 
+-- === Solver Wolkenkratzer ===
+-- Solves the puzzle
 solverWk :: Wk -> Maybe Matrix
 solverWk wk = solverAuxWk (pruneWk wk 0)
 
--- === Solver Wolkenkratzer ===
--- Solves the puzzle
 solverAuxWk :: Wk -> Maybe Matrix
 solverAuxWk (matrix, vs) = solverAux matrix vs
     where
