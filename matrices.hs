@@ -19,6 +19,7 @@ module Matrices (Matrix,
                 verifyFixed,
                 verifyEmpty,
                 makeIntMatrix,
+                cleanExtreme,
                 showMatrix,
                 showMatrixPossibilities) where
 
@@ -171,7 +172,7 @@ isFixed _         = True
 -- Builds two next Matrices: one with the first Possible element Fixed, 
 -- other with all Possible without the fixed number
 nextMatrices :: Matrix -> (Matrix, Matrix)
-nextMatrices m = (fixCell m (i,j) v, putElement m (i,j) b)
+nextMatrices m = (cleanAll (fixCell m (i,j) v), putElement m (i,j) b)
     where
         (i,j) = getCordFirstPossible m 0
         v = getElement m (i, j)
@@ -197,10 +198,10 @@ changeList (Possible (x:xs)) = (Possible xs)
 -- Generic implementation for fixCell
 putElement :: Matrix -> (Int, Int) -> Cell -> Matrix
 putElement m (i,j) value = (take i m)           ++ --Firsts i rows of matrix
-                        [(take j (m!!i))     ++ --Firsts j cells of row
-                        [value]      ++ --Put value in cell of row
-                        (drop (j+1) (m!!i))] ++ --Lasts (j + 1) cells of row
-                        (drop (i+1) m)          --Lasts (i + 1) rows of matrix
+                           [(take j (m!!i))     ++ --Firsts j cells of row
+                           [value]              ++ --Put value in cell of row
+                           (drop (j+1) (m!!i))] ++ --Lasts (j + 1) cells of row
+                           (drop (i+1) m)          --Lasts (i + 1) rows of matrix
 
 
 
@@ -214,7 +215,7 @@ solverMatrixFixed matrix = solverAux (cleanAll matrix)
 -- === Verify Empty ===
 -- Verifies if the next first possible is empty
 verifyEmpty :: Matrix -> Bool
-verifyEmpty m | (i,j) == (-1, -1) = True 
+verifyEmpty m | (i,j) == (-1, -1) = True
               | getElement m (i,j) == -666 = True
               | otherwise = False
             where
@@ -231,7 +232,11 @@ makeIntRow row = map convertFixed row
 makeIntMatrix :: Matrix -> [[Int]]
 makeIntMatrix mat = map makeIntRow mat
 
-
+cleanExtreme :: Matrix -> (Int,Int) -> Matrix
+cleanExtreme m (i,j) | isFixed ((m!!i)!!j) = putElement m (i,j) (Possible (removeElementInList (pickCell ((m!!i)!!j)) ((length m)-1)))
+                     | otherwise = m
+    where
+        pickCell (Possible x) = x
 
 -- ============
 -- === Show ===

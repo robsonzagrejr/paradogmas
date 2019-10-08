@@ -32,7 +32,7 @@ main = do
         Just matrix' -> putStrLn $ showMatrix matrix'
     end <- getCurrentTime
     print (diffUTCTime end start)
-    
+
     start <- getCurrentTime
     print("==========Solve Matrix [5x5]======")
     case solverWk (myExample 12) of
@@ -60,6 +60,14 @@ main = do
     start <- getCurrentTime
     print("==========Solve Matrix [6x6]======")
     case solverWk (myExample 15) of
+        Nothing    -> putStrLn "No solution found"
+        Just matrix' -> putStrLn $ showMatrix matrix'
+    end <- getCurrentTime
+    print (diffUTCTime end start)
+
+    start <- getCurrentTime
+    print("==========Solve Matrix [6x6]======")
+    case solverWk (myExample 16) of
         Nothing    -> putStrLn "No solution found"
         Just matrix' -> putStrLn $ showMatrix matrix'
     end <- getCurrentTime
