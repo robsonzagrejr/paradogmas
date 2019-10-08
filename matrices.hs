@@ -232,11 +232,15 @@ makeIntRow row = map convertFixed row
 makeIntMatrix :: Matrix -> [[Int]]
 makeIntMatrix mat = map makeIntRow mat
 
-cleanExtreme :: Matrix -> (Int,Int) -> Matrix
-cleanExtreme m (i,j) | isFixed ((m!!i)!!j) = putElement m (i,j) (Possible (removeElementInList (pickCell ((m!!i)!!j)) ((length m)-1)))
-                     | otherwise = m
+cleanExtreme :: Matrix -> (Int,Int) -> Int -> Matrix
+cleanExtreme m (i,j) qt | isFixed ((m!!i)!!j) = putElement m (i,j) (removeListInCell ((m!!i)!!j) (getPseudoList (length m) qt))
+                        | otherwise = m
     where
         pickCell (Possible x) = x
+
+getPseudoList :: Int -> Int -> [Int]
+getPseudoList _ 0 = []
+getPseudoList n qt = [n] ++ getPseudoList (n-1) (qt-1)
 
 -- ============
 -- === Show ===

@@ -71,7 +71,7 @@ pruneWkVs :: Matrix -> [Int] -> Int -> Matrix
 pruneWkVs m [] _ = m
 pruneWkVs m (x:xs) index | x == 1 = pruneWkVs (fixCell m pos (length m)) xs index
                          | x == (length m) = pruneWkVs (completeLine m cond ((length m) - (length (x:xs))) (length m)) xs index
-                         | x > 1 = pruneWkVs (cleanExtreme m pos) xs index
+                         | x > 1 = pruneWkVs (cleanExtreme m pos (x-1)) xs index
                          | otherwise = pruneWkVs m xs index
     where
         -- Position in Matrix (i,j)
